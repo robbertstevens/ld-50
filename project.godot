@@ -18,6 +18,10 @@ config/icon="res://icon.png"
 
 utils="*res://utils.gd"
 
+[debug]
+
+shapes/collision/shape_color=Color( 1, 1, 1, 0.392157 )
+
 [display]
 
 window/size/width=320
@@ -60,7 +64,8 @@ texture={
 
 ui_accept={
 "deadzone": 0.5,
-"events": [  ]
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
 }
 ui_select={
 "deadzone": 0.5,
@@ -118,6 +123,7 @@ ui_end={
 [layer_names]
 
 2d_physics/layer_1="Water"
+2d_physics/layer_2="PlayerPhysics"
 
 [physics]
 
