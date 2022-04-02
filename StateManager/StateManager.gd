@@ -14,9 +14,10 @@ func init(entity_states: Dictionary, available_state_fns: Dictionary, starting_s
 
 func change_state(new_state: int) -> int:
     if not current_state == new_state:
-        print_debug("Changed to state: ", utils.get_enum_value(states, new_state))
         previous_state = current_state
         current_state = new_state
+        
+        print_debug("Changed to state: ", utils.get_enum_value(states, new_state))
     
     return current_state
 
