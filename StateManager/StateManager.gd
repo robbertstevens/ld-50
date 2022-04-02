@@ -28,8 +28,8 @@ func physics_process(delta: float) -> void:
         return
         
     var new_state = process_func.call_func(delta)
-    
-    if new_state:
+
+    if not new_state == current_state:
         change_state(new_state)
 
 
@@ -40,3 +40,7 @@ func get_state_fn(state: int) -> FuncRef:
         return state_fns[state]
         
     return null
+
+
+func isState(state: int) -> bool:
+    return current_state == state
