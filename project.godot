@@ -11,11 +11,73 @@ config_version=4
 [application]
 
 config/name="LD-50"
+run/main_scene="res://Game.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=700
+window/size/height=500
+window/size/resizable=false
 
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
+
+[input]
+
+ui_accept={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_select={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_cancel={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_focus_next={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_focus_prev={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_left={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_right={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_up={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_down={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_page_up={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_page_down={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_home={
+"deadzone": 0.5,
+"events": [  ]
+}
+ui_end={
+"deadzone": 0.5,
+"events": [  ]
+}
 
 [physics]
 
