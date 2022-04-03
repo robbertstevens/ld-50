@@ -5,6 +5,9 @@ func _input(event: InputEvent) -> void:
             var mouse :Vector2 = get_global_mouse_position()
             var cell :Vector2 = world_to_map(mouse)
             var abc :int = get_cellv(cell)
-            var new_abc :int = (abc + 1) % 2 # just an example plus 1 modules 3
+            var new_abc :int = 1 if abc == -1 else -1
+            
             set_cellv(cell, new_abc)
+            update_bitmask_area(cell)
+
 

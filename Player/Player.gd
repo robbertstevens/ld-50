@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-export (PackedScene) onready var Bomb
+signal bomb_thrown(position, target)
 
 export var speed = 10
 
@@ -76,11 +76,8 @@ func _aiming_state(delta: float) -> int:
 func _attacking_state(delta:float) -> int:
     crosshair.hide()
     
-    var bomb_instance = Bomb.instance()
-    bomb_instance.global_position = global_position
-    bomb_instance.target = crosshair.global_position
-    
-    get_tree().root.add_child(bomb_instance)
+    emit_signal("bomb_thrown", global_position, crosshair.global_position)
+
     return States.Idle
 
 
