@@ -9,8 +9,9 @@ onready var player = $Player
 onready var land = $TileMaps/Land
 onready var water = $TileMaps/Water
 
-var water_tile_id = 1
-var land_tile_id = 0
+var EMPTY_TILE_ID = -1
+var WATER_TILE_ID = 1
+var LAND_TILE_ID = 0
 
 export (float) var radius = 4
 
@@ -51,13 +52,18 @@ func _on_Bomb_explode(position) -> void:
     for y in range(top_left.y, bottom_right.y):
         for x in range(top_left.x, bottom_right.x):
             var coord = Vector2(x, y)
-            if (inside_circle(hit_cell, coord, radius)):
+            
+            if not inside_circle(hit_cell, coord, radius):
+                continue
+            
+            if land.get_cellv(coord) == LAND_TILE_ID:
 #                create_debug_block(coord * tile_size + Vector2(4,4))
-                land.set_cellv(coord, -1)
-                water.set_cellv(coord, water_tile_id)
+                land.set_cellv(coord, EMPTY_TILE_ID)
+                water.set_cellv(coord, WATER_TILE_ID)
     
     land.update_bitmask_region(top_left, bottom_right)
     water.update_bitmask_region(top_left, bottom_right)
+
 
 func create_debug_block(position: Vector2) -> void:
     var c_i = Corner.instance()
@@ -77,9 +83,9 @@ func _on_Player_land_build(position) -> void:
     var tile = land.world_to_map(position)
     var cell = land.get_cellv(tile)
     
-    if cell == -1:
-        land.set_cellv(tile, land_tile_id)
-        water.set_cellv(tile, -1)
+    if cell == EMPTY_TILE_ID:
+        land.set_cellv(tile, LAND_TILE_ID)
+        water.set_cellv(tile, EMPTY_TILE_ID)
         land.update_bitmask_area(tile)
 
 
