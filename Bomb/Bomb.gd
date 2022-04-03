@@ -63,32 +63,6 @@ func _exploding_state(delta: float) -> int:
     queue_free()
     
     return -1
-    
-
-#func _on_Area2D_body_entered(body: Node) -> void:
-#    if body is TileMap and body.name=="Land":
-#        var hit_cell: Vector2 = body.world_to_map(global_position)
-#
-##        create_debug_block(global_position)
-#
-#        var tile_size = 8
-#
-#        var top_left = hit_cell - Vector2.ONE * radius
-#        var bottom_right = hit_cell + Vector2.ONE * radius + Vector2.ONE 
-#
-##        create_debug_block(Vector2(top_left.x, top_left.y)) # TL
-##        create_debug_block(Vector2(bottom_right.x, top_left.y)) # TR
-##        create_debug_block(Vector2(top_left.x, bottom_right.y)) # BL
-##        create_debug_block(Vector2(bottom_right.x, bottom_right.y)) # BR
-#
-#        for y in range(top_left.y, bottom_right.y):
-#            for x in range(top_left.x, bottom_right.x):
-#                var coord = Vector2(x, y)
-#                if (inside_circle(hit_cell, coord, radius)):
-#                    create_debug_block(coord * tile_size)
-#                    body.set_cellv(coord, -1)
-#
-#        body.update_bitmask_region()
 
 
 

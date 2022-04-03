@@ -7,7 +7,7 @@ func _input(event: InputEvent) -> void:
             var abc :int = get_cellv(cell)
             var new_abc :int = 1 if abc == -1 else -1
             
-            set_cellv(cell, new_abc)
+            #set_cellv(cell, new_abc)
             update_bitmask_area(cell)
 
 

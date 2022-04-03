@@ -18,3 +18,5 @@ func _ready() -> void:
             
             if not land_tiles.has(coord):
                 water.set_cellv(coord, 1)
+
+    water.update_bitmask_region()

@@ -7,6 +7,8 @@ export (PackedScene) onready var Corner
 onready var camera = $Camera
 onready var player = $Player
 
+var water_tile_id = 1
+
 export (float) var radius = 4
 
 func _physics_process(delta: float) -> void:
@@ -34,7 +36,7 @@ func _on_Bomb_explode(position) -> void:
     
     var hit_cell: Vector2 = land.world_to_map(position)
         
-    create_debug_block(position)
+#    create_debug_block(position)
         
     var tile_size = 8
     
@@ -50,12 +52,12 @@ func _on_Bomb_explode(position) -> void:
         for x in range(top_left.x, bottom_right.x):
             var coord = Vector2(x, y)
             if (inside_circle(hit_cell, coord, radius)):
-                create_debug_block(coord * tile_size + Vector2(4,4))
+#                create_debug_block(coord * tile_size + Vector2(4,4))
                 land.set_cellv(coord, -1)
-                water.set_cellv(coord, 1)
+                water.set_cellv(coord, water_tile_id)
     
     land.update_bitmask_region()
-
+    water.update_bitmask_region()
 
 func create_debug_block(position: Vector2) -> void:
     var c_i = Corner.instance()
