@@ -6,8 +6,11 @@ export (PackedScene) onready var Corner
 
 onready var camera = $Camera
 onready var player = $Player
+onready var land = $TileMaps/Land
+onready var water = $TileMaps/Water
 
 var water_tile_id = 1
+var land_tile_id = 0
 
 export (float) var radius = 4
 
@@ -31,9 +34,6 @@ func _on_KinematicBody2D_bomb_thrown(position, target) -> void:
 
 
 func _on_Bomb_explode(position) -> void:
-    var land = $TileMaps/Land
-    var water = $TileMaps/Water
-    
     var hit_cell: Vector2 = land.world_to_map(position)
         
 #    create_debug_block(position)
@@ -56,8 +56,8 @@ func _on_Bomb_explode(position) -> void:
                 land.set_cellv(coord, -1)
                 water.set_cellv(coord, water_tile_id)
     
-    land.update_bitmask_region()
-    water.update_bitmask_region()
+    land.update_bitmask_region(top_left, bottom_right)
+    water.update_bitmask_region(top_left, bottom_right)
 
 func create_debug_block(position: Vector2) -> void:
     var c_i = Corner.instance()
@@ -71,6 +71,16 @@ func inside_circle(center: Vector2, tile: Vector2, radius: float) -> bool:
     var distance = sqrt(dx*dx + dy*dy);
     
     return distance <= radius;
+
+
+func _on_Player_land_build(position) -> void:
+    var tile = land.world_to_map(position)
+    var cell = land.get_cellv(tile)
+    
+    if cell == -1:
+        land.set_cellv(tile, land_tile_id)
+        water.set_cellv(tile, -1)
+        land.update_bitmask_area(tile)
 
 
 class TileMapBounds:

@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=89 format=2]
+[gd_resource type="TileSet" load_steps=92 format=2]
 
 [ext_resource path="res://Assets/land-auto-tile.png" type="Texture" id=2]
 
@@ -263,6 +263,15 @@ points = PoolVector2Array( 1, 8, 0, 8, 0, 7, 1, 7 )
 [sub_resource type="ConvexPolygonShape2D" id=87]
 points = PoolVector2Array( 7, 8, 7, 7, 8, 7, 8, 8 )
 
+[sub_resource type="ConvexPolygonShape2D" id=88]
+points = PoolVector2Array( -24, 0, -24, 0, -24, 0, -24, 0 )
+
+[sub_resource type="ConvexPolygonShape2D" id=89]
+points = PoolVector2Array( 8, 8, 0, 8, 0, 0, 8, 0 )
+
+[sub_resource type="ConvexPolygonShape2D" id=90]
+points = PoolVector2Array( 8, 8, 0, 8, 0, 0, 8, 0 )
+
 [resource]
 0/name = "land-auto-tile.png 0"
 0/texture = ExtResource( 2 )
@@ -271,13 +280,13 @@ points = PoolVector2Array( 7, 8, 7, 7, 8, 7, 8, 8 )
 0/region = Rect2( 0, 0, 80, 40 )
 0/tile_mode = 1
 0/autotile/bitmask_mode = 1
-0/autotile/bitmask_flags = [ Vector2( 0, 0 ), 432, Vector2( 0, 1 ), 438, Vector2( 0, 2 ), 54, Vector2( 0, 3 ), 48, Vector2( 1, 0 ), 504, Vector2( 1, 1 ), 511, Vector2( 1, 2 ), 63, Vector2( 1, 3 ), 56, Vector2( 2, 0 ), 216, Vector2( 2, 1 ), 219, Vector2( 2, 2 ), 27, Vector2( 2, 3 ), 24, Vector2( 2, 4 ), 443, Vector2( 3, 0 ), 144, Vector2( 3, 1 ), 146, Vector2( 3, 2 ), 18, Vector2( 3, 3 ), 16, Vector2( 3, 4 ), 254, Vector2( 4, 0 ), 176, Vector2( 4, 1 ), 178, Vector2( 4, 2 ), 50, Vector2( 4, 3 ), 248, Vector2( 4, 4 ), 434, Vector2( 5, 0 ), 184, Vector2( 5, 1 ), 186, Vector2( 5, 2 ), 58, Vector2( 5, 3 ), 155, Vector2( 5, 4 ), 62, Vector2( 6, 0 ), 152, Vector2( 6, 1 ), 154, Vector2( 6, 2 ), 26, Vector2( 6, 3 ), 182, Vector2( 6, 4 ), 59, Vector2( 7, 0 ), 255, Vector2( 7, 1 ), 251, Vector2( 7, 2 ), 507, Vector2( 7, 3 ), 440, Vector2( 7, 4 ), 218, Vector2( 8, 0 ), 191, Vector2( 8, 1 ), 186, Vector2( 8, 2 ), 506, Vector2( 8, 3 ), 187, Vector2( 8, 4 ), 250, Vector2( 9, 0 ), 447, Vector2( 9, 1 ), 446, Vector2( 9, 2 ), 510, Vector2( 9, 3 ), 190, Vector2( 9, 4 ), 442 ]
+0/autotile/bitmask_flags = [ Vector2( 0, 0 ), 432, Vector2( 0, 1 ), 438, Vector2( 0, 2 ), 54, Vector2( 0, 3 ), 48, Vector2( 0, 4 ), 511, Vector2( 1, 0 ), 504, Vector2( 1, 1 ), 511, Vector2( 1, 2 ), 63, Vector2( 1, 3 ), 56, Vector2( 1, 4 ), 511, Vector2( 2, 0 ), 216, Vector2( 2, 1 ), 219, Vector2( 2, 2 ), 27, Vector2( 2, 3 ), 24, Vector2( 2, 4 ), 443, Vector2( 3, 0 ), 144, Vector2( 3, 1 ), 146, Vector2( 3, 2 ), 18, Vector2( 3, 3 ), 16, Vector2( 3, 4 ), 254, Vector2( 4, 0 ), 176, Vector2( 4, 1 ), 178, Vector2( 4, 2 ), 50, Vector2( 4, 3 ), 248, Vector2( 4, 4 ), 434, Vector2( 5, 0 ), 184, Vector2( 5, 1 ), 186, Vector2( 5, 2 ), 58, Vector2( 5, 3 ), 155, Vector2( 5, 4 ), 62, Vector2( 6, 0 ), 152, Vector2( 6, 1 ), 154, Vector2( 6, 2 ), 26, Vector2( 6, 3 ), 182, Vector2( 6, 4 ), 59, Vector2( 7, 0 ), 255, Vector2( 7, 1 ), 251, Vector2( 7, 2 ), 507, Vector2( 7, 3 ), 440, Vector2( 7, 4 ), 218, Vector2( 8, 0 ), 191, Vector2( 8, 1 ), 186, Vector2( 8, 2 ), 506, Vector2( 8, 3 ), 187, Vector2( 8, 4 ), 250, Vector2( 9, 0 ), 447, Vector2( 9, 1 ), 446, Vector2( 9, 2 ), 510, Vector2( 9, 3 ), 190, Vector2( 9, 4 ), 442 ]
 0/autotile/icon_coordinate = Vector2( 3, 3 )
 0/autotile/tile_size = Vector2( 8, 8 )
 0/autotile/spacing = 0
 0/autotile/occluder_map = [  ]
 0/autotile/navpoly_map = [  ]
-0/autotile/priority_map = [  ]
+0/autotile/priority_map = [ Vector3( 1, 1, 38 ) ]
 0/autotile/z_index_map = [  ]
 0/occluder_offset = Vector2( 0, 0 )
 0/navigation_offset = Vector2( 0, 0 )
@@ -829,9 +838,28 @@ points = PoolVector2Array( 7, 8, 7, 7, 8, 7, 8, 8 )
 1/navigation_offset = Vector2( 0, 0 )
 1/shape_offset = Vector2( 0, 0 )
 1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape = SubResource( 88 )
 1/shape_one_way = false
-1/shape_one_way_margin = 0.0
-1/shapes = [  ]
+1/shape_one_way_margin = 1.0
+1/shapes = [ {
+"autotile_coord": Vector2( 5, 1 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 88 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+}, {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 89 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+}, {
+"autotile_coord": Vector2( 1, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 90 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
 1/z_index = 0
 2/name = "land-auto-tile.png 2"
 2/texture = ExtResource( 2 )
