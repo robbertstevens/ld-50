@@ -20,7 +20,7 @@ const LAND_TILE_ID = 0
 var tile_size = 8
 var center: Vector2
 
-export (float) var radius = 4
+export (float) var radius = 3
 
 func _ready() -> void:
     rng.randomize()
@@ -98,12 +98,14 @@ func create_bomb(position: Vector2, target: Vector2):
     
     return bomb_instance
 
+
 func inside_circle(center: Vector2, tile: Vector2, radius: float) -> bool:
     var dx = center.x - tile.x;
     var dy = center.y - tile.y;
     var distance = sqrt(dx*dx + dy*dy);
     
     return distance <= radius;
+
 
 func rotate_around_point(pos: Vector2, center: Vector2, angle: float) -> Vector2: 
     var r = angle * (PI / 180)
@@ -113,7 +115,11 @@ func rotate_around_point(pos: Vector2, center: Vector2, angle: float) -> Vector2
     
     return Vector2(x, y)
 
+
 func _on_Player_land_build(position) -> void:
+    # TODO: Should make the building more predictable
+    
+    var player_tile = land.world_to_map(player.global_position)
     var tile = land.world_to_map(position)
     var cell = land.get_cellv(tile)
     

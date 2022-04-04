@@ -10,6 +10,7 @@ export var speed = 10
 onready var state_manager = $StateManager
 onready var crosshair = $Crosshair
 onready var drowning_timer = $DrowningTimer
+onready var animation_manager = $AnimatedSprite
 
 enum States {
     Idle,
@@ -27,6 +28,8 @@ enum States {
 
 var velocity: Vector2 = Vector2.ZERO
 var direction: Vector2 = Vector2.ZERO
+var crosshair_origin: Vector2
+
 
 func _ready() -> void:
     var state_fn = {
@@ -43,6 +46,7 @@ func _ready() -> void:
     }
     
     state_manager.init(States, state_fn, States.Idle)
+    crosshair_origin = crosshair.position
     crosshair.hide()
 
 
@@ -51,16 +55,21 @@ func _physics_process(delta: float) -> void:
     
     var collisions = move_and_collide(Vector2.LEFT, true, true, true)
     
-    if collisions and is_alive():
+    if collisions and collisions.collider.name == "Water" and is_alive():
         state_manager.change_state(States.Drowning)
 
 
 func _idle_state(_delta: float) -> int:
+    animation_manager.play("idle")
     return States.Idle
 
 
 func _walking_state(_delta: float) -> int:
     direction = get_direction()
+    
+    animation_manager.play("walking")
+    if direction.x > 0: animation_manager.flip_h = false
+    if direction.x < 0: animation_manager.flip_h = true
     
     if direction.length() <= 0: 
         return state_manager.change_state(States.Idle)
@@ -100,11 +109,12 @@ func _attacking_state(delta: float) -> int:
 
 func _prepare_building_state(delta: float) -> int:
     var dir = get_direction()
-    var aimed_at = global_position + (dir.normalized() * 8)
+    
+    var aimed_at = crosshair_origin + (dir.normalized() * 8)
     
     crosshair.show()
     
-    crosshair.global_position = aimed_at
+    crosshair.position = aimed_at
     
     return States.PrepareBuilding
 
@@ -121,10 +131,13 @@ func _drowning_state(delta: float) -> int:
     if drowning_timer.is_stopped():
         drowning_timer.start()
     
+    animation_manager.play("drowning")
+    
     return States.Drowning
 
 func _died_state(delta: float) -> int:
     emit_signal('died')
+    animation_manager.play("dead")
     return States.Dead
 
 func _dead_state(delta: float) -> int:
