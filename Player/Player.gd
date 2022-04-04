@@ -111,12 +111,6 @@ func _input(event: InputEvent) -> void:
     if direction.length() > 0 and state_manager.isState(States.Idle):
         state_manager.change_state(States.Walking)
 
-    if event.is_action_pressed('ui_attack'):
-        state_manager.change_state(States.PrepareAttacking)
-
-    if event.is_action_released('ui_attack'):
-        state_manager.change_state(States.Attacking)
-
     if event.is_action_pressed("ui_build"):
         state_manager.change_state(States.PrepareBuilding)
         
