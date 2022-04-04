@@ -1,4 +1,4 @@
-extends Node2D
+extends Level
 
 
 export (PackedScene) onready var Bomb
@@ -162,4 +162,4 @@ class TileMapBounds:
 
 
 func _on_Player_died() -> void:
-    print("player died")
+    end_level({"alive_time": 10})

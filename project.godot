@@ -8,15 +8,25 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "Level",
+"language": "GDScript",
+"path": "res://Shared/Level.gd"
+} ]
+_global_script_class_icons={
+"Level": ""
+}
+
 [application]
 
 config/name="LD-50"
-run/main_scene="res://Game.tscn"
+run/main_scene="res://Root.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-utils="*res://utils.gd"
+utils="*res://Utils.gd"
 
 [debug]
 

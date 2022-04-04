@@ -5,7 +5,7 @@
 [ext_resource path="res://TestTilemap.gd" type="Script" id=3]
 [ext_resource path="res://Zeus/Zeus.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Map.gd" type="Script" id=5]
-[ext_resource path="res://Game.gd" type="Script" id=6]
+[ext_resource path="res://Levels/Island/Game.gd" type="Script" id=6]
 [ext_resource path="res://Bomb/Bomb.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Shared/Corner.tscn" type="PackedScene" id=8]
 
@@ -47,6 +47,7 @@ autostart = true
 [node name="Zeus" parent="." instance=ExtResource( 4 )]
 position = Vector2( 101, 59 )
 
+[connection signal="level_ended" from="." to="." method="_on_Game_level_ended"]
 [connection signal="bomb_thrown" from="Player" to="." method="_on_KinematicBody2D_bomb_thrown"]
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
 [connection signal="land_build" from="Player" to="." method="_on_Player_land_build"]

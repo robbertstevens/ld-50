@@ -89,7 +89,6 @@ shape = SubResource( 11 )
 
 [node name="Crosshair" parent="." instance=ExtResource( 5 )]
 position = Vector2( 0, 2 )
-frame = 1
 
 [node name="DrowningTimer" type="Timer" parent="."]
 one_shot = true
