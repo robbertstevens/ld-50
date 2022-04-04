@@ -20,6 +20,8 @@ const LAND_TILE_ID = 0
 var tile_size = 8
 var center: Vector2
 
+var time_alive := 0.0
+
 export (float) var radius = 3
 
 func _ready() -> void:
@@ -38,15 +40,19 @@ func _ready() -> void:
     camera.limit_bottom = bounds.limit_bottom
 
     center = land.get_used_rect().get_center() * tile_size
-    create_debug_block(center)
-    print(center)
+
+func _process(delta: float) -> void:
+    time_alive += delta
+    
+    print(time_alive)
+
 
 func _physics_process(delta: float) -> void:
     camera.global_position = lerp(camera.global_position, player.global_position, 0.2)
 
-
     # Move Zeus
     zeus.global_position = rotate_around_point(zeus.global_position, center, 25 * delta)
+
 
 func _on_KinematicBody2D_bomb_thrown(position, target) -> void:
     var bomb_instance = create_bomb(position, target)
@@ -162,4 +168,4 @@ class TileMapBounds:
 
 
 func _on_Player_died() -> void:
-    end_level({"alive_time": 10})
+    end_level({"alive_time": time_alive})
