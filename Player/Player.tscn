@@ -89,11 +89,17 @@ shape = SubResource( 11 )
 
 [node name="Crosshair" parent="." instance=ExtResource( 5 )]
 position = Vector2( 0, 2 )
+frame = 1
 
 [node name="DrowningTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="DashTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
 [connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
 [connection signal="timeout" from="DrowningTimer" to="." method="_on_DrowningTimer_timeout"]
+[connection signal="timeout" from="DashTimer" to="." method="_on_DashTimer_timeout"]
 
 [editable path="HitBox"]

@@ -3,6 +3,7 @@ extends Level
 
 export (PackedScene) onready var Bomb
 export (PackedScene) onready var Corner
+export (PackedScene) onready var Smoke
 
 onready var camera = $Camera
 onready var player = $Player
@@ -43,8 +44,6 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
     time_alive += delta
-    
-    print(time_alive)
 
 
 func _physics_process(delta: float) -> void:
@@ -80,6 +79,8 @@ func _on_Bomb_explode(position) -> void:
             if not inside_circle(hit_cell, coord, radius):
                 continue
             
+            add_child(create_smoke(coord * tile_size + Vector2(4,4)))
+            
             if land.get_cellv(coord) == LAND_TILE_ID:
 #                create_debug_block(coord * tile_size + Vector2(4,4))
                 land.set_cellv(coord, EMPTY_TILE_ID)
@@ -93,6 +94,12 @@ func create_debug_block(position: Vector2) -> void:
     var c_i = Corner.instance()
     c_i.global_position = position
     add_child(c_i)
+
+func create_smoke(position: Vector2):
+    var smoke_instance = Smoke.instance()
+    smoke_instance.global_position = position
+    
+    return smoke_instance
 
 
 func create_bomb(position: Vector2, target: Vector2):

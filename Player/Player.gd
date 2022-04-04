@@ -10,6 +10,7 @@ export var speed = 10
 onready var state_manager = $StateManager
 onready var crosshair = $Crosshair
 onready var drowning_timer = $DrowningTimer
+onready var dash_timer = $DashTimer
 onready var animation_manager = $AnimatedSprite
 
 enum States {
@@ -22,7 +23,8 @@ enum States {
     Building,
     Drowning,
     Died,
-    Dead
+    Dead,
+    Dash,
 }
 
 
@@ -43,6 +45,7 @@ func _ready() -> void:
         States.Drowning: funcref(self, "_drowning_state"),
         States.Died: funcref(self, "_died_state"),
         States.Dead: funcref(self, "_dead_state"),
+        States.Dash: funcref(self, "_dash_state"),
     }
     
     state_manager.init(States, state_fn, States.Idle)
@@ -79,6 +82,19 @@ func _walking_state(_delta: float) -> int:
     velocity = move_and_slide(normalized * speed)
     
     return States.Walking
+
+
+func _dash_state(delta: float) -> int:
+    $CollisionShape2D.disabled = true
+    if dash_timer.is_stopped():
+        dash_timer.start()
+        direction = get_direction()
+    
+    var normalized = direction.normalized()
+   
+    velocity = move_and_slide(normalized * 500)
+    
+    return States.Dash
 
 
 func _prepare_attacking_state(_delta: float) -> int:
@@ -149,8 +165,11 @@ func _input(event: InputEvent) -> void:
 
     # check if player is 'alive'
     if is_alive():
-        if direction.length() > 0 and state_manager.isState(States.Idle):
+        if direction.length() > 0 and state_manager.isState(States.Idle) and can_move():
             state_manager.change_state(States.Walking)
+
+        if event.is_action_pressed('ui_attack'):
+            state_manager.change_state(States.Dash)
 
         if event.is_action_pressed("ui_build"):
             state_manager.change_state(States.PrepareBuilding)
@@ -158,8 +177,13 @@ func _input(event: InputEvent) -> void:
         if event.is_action_released("ui_build"):
             state_manager.change_state(States.Building)
 
+
 func is_alive() -> bool:
     return not (state_manager.isState(States.Drowning) or state_manager.isState(States.Dead))
+
+
+func can_move() -> bool:
+    return not (state_manager.isState(States.Dash)) or not is_alive()
 
 
 func get_direction() -> Vector2:
@@ -181,3 +205,8 @@ func _on_HitBox_body_entered(body: Node) -> void:
 
 func _on_DrowningTimer_timeout() -> void:
     state_manager.change_state(States.Died)
+
+
+func _on_DashTimer_timeout() -> void:
+    $CollisionShape2D.disabled = false
+    state_manager.change_state(state_manager.previous_state)
