@@ -3,13 +3,20 @@ extends Level
 export (PackedScene) onready var Bomb
 export (PackedScene) onready var Corner
 export (PackedScene) onready var Smoke
+export (PackedScene) onready var DirtBag
+
+
+export (float) var radius = 3
+export (float) var build_radius = 1
 
 onready var camera = $Camera
-onready var player = $Player
+onready var player = $YSort/Player
 onready var land = $TileMaps/Land
 onready var water = $TileMaps/Water
 onready var zeus = $Zeus
 onready var explosion_sound = $ExplosionAudioStreamPlayer
+onready var dirt_count_label = $CanvasLayer/HBoxContainer/VBoxContainer/Dirt/DirtCount
+onready var time_alive_label = $CanvasLayer/HBoxContainer/VBoxContainer/AliveTime/AliveTimeCount
 
 var rng = RandomNumberGenerator.new()
 
@@ -21,11 +28,11 @@ const LAND_TILE_ID = 0
 var tile_size = 8
 var center: Vector2
 
-var time_alive := 0.0
+var time_alive := 0.0 setget set_time_alive
 
-export (float) var radius = 3
-export (float) var build_radius = 1
+var dirt_bags := 0 setget set_dirt_bags
 
+var time_alive_label_text := ""
 
 func _ready() -> void:
     rng.randomize()
@@ -38,9 +45,10 @@ func _ready() -> void:
     camera.limit_bottom = bounds.limit_bottom
 
     center = land.get_used_rect().get_center() * tile_size
-
-func _process(delta: float) -> void:
-    time_alive += delta
+    
+    time_alive_label_text = time_alive_label.text
+    
+    _on_DirtBagTimer_timeout()
 
 
 func _physics_process(delta: float) -> void:
@@ -94,11 +102,17 @@ func create_debug_block(position: Vector2) -> void:
     c_i.global_position = position
     add_child(c_i)
 
+
 func create_smoke(position: Vector2) -> void:
     var smoke_instance = Smoke.instance()
     smoke_instance.global_position = position
     add_child(smoke_instance)
 
+
+func create_dirt_bag(position: Vector2) -> void:
+    var dirt_bag_instance = DirtBag.instance()
+    dirt_bag_instance.global_position = position
+    $YSort.add_child(dirt_bag_instance)
 
 func create_bomb(position: Vector2, target: Vector2):
     var bomb_instance = Bomb.instance()
@@ -120,7 +134,9 @@ func inside_circle(center: Vector2, tile: Vector2, radius: float) -> bool:
 
 func _on_Player_land_build(position) -> void:
     # TODO: Should make the building more predictable
-    
+    if dirt_bags <= 0: 
+        return
+        
     var player_tile = land.world_to_map(player.global_position)
     var tile = land.world_to_map(position)
     var cell = land.get_cellv(tile)
@@ -143,6 +159,8 @@ func _on_Player_land_build(position) -> void:
     
     land.update_bitmask_region(top_left, bottom_right)
     water.update_bitmask_region(top_left, bottom_right)
+    
+    self.dirt_bags -= 1
 
 
 func _on_BombTimer_timeout() -> void:    
@@ -180,8 +198,37 @@ class TileMapBounds:
 
 
 func _on_Player_died() -> void:
-    end_level({"alive_time": time_alive})
+    $EndLevelTimer.start()
 
 
 func _on_Player_dashed(position) -> void:
     create_smoke(position)
+
+
+func _on_Player_dirt_picked_up() -> void:
+    self.dirt_bags += 5
+
+
+func set_dirt_bags(new_value):
+    dirt_bags = new_value
+    dirt_count_label.text = str(dirt_bags)
+
+
+func set_time_alive(new_value):
+    time_alive = new_value
+    time_alive_label.text = time_alive_label_text.format({'seconds': "%0.2f" % time_alive})
+
+func _on_DirtBagTimer_timeout() -> void:
+    var available_tiles = land.get_used_cells_by_id(LAND_TILE_ID)
+    
+    var target = available_tiles[rng.randi_range(0, available_tiles.size() - 1)]
+    
+    create_dirt_bag(target * tile_size)
+
+
+func _on_EndLevelTimer_timeout() -> void:
+    end_level({"alive_time": time_alive}) # Replace with function body.
+
+
+func _on_Player_alive_time_updated(new_time) -> void:
+    self.time_alive = new_time

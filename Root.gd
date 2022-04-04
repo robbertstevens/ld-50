@@ -43,7 +43,7 @@ func load_level(level: PackedScene, data: Dictionary) -> void:
     
     current_level_instance = current_level_scene.instance()
     current_level_instance.data = data
-    print(data)
+
     if utils.object_has_signal(current_level_instance, "level_ended"):
         current_level_instance.connect("level_ended", self, "_on_current_level_instance_level_ended")
     

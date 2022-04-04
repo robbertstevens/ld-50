@@ -10,7 +10,6 @@ func _ready() -> void:
     var top_left = land_rect.position - Vector2(10,10)
     var bottom_right = land_rect.end + Vector2(10,10)
     
-    print(top_left, bottom_right)
     
     for y in range(top_left.y, bottom_right.y):
         for x in range(top_left.x, bottom_right.x):

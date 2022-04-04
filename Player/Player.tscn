@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://StateManager/StateManager.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player/Player.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Crosshair/Crosshair.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/dash.wav" type="AudioStream" id=6]
 [ext_resource path="res://Assets/drowning.wav" type="AudioStream" id=7]
+[ext_resource path="res://Assets/pickup.wav" type="AudioStream" id=8]
 
 [sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 3 )
@@ -72,7 +73,7 @@ animations = [ {
 radius = 2.0
 
 [sub_resource type="CircleShape2D" id=11]
-radius = 1.0
+radius = 6.0
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -92,20 +93,24 @@ shape = SubResource( 1 )
 
 [node name="HitBox" parent="." instance=ExtResource( 4 )]
 collision_layer = 2
-collision_mask = 8
+collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-position = Vector2( 0, 4 )
 shape = SubResource( 11 )
 
 [node name="Crosshair" parent="." instance=ExtResource( 5 )]
-position = Vector2( 0, 2 )
+position = Vector2( 0, 1 )
+frame = 1
 
 [node name="DrowningTimer" type="Timer" parent="."]
+wait_time = 0.5
 one_shot = true
 
 [node name="DashTimer" type="Timer" parent="."]
 wait_time = 0.1
+one_shot = true
+
+[node name="DashCooldownTimer" type="Timer" parent="."]
 one_shot = true
 
 [node name="DashAudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
@@ -114,7 +119,10 @@ stream = ExtResource( 6 )
 [node name="DrowningAudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 7 )
 
-[connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
+[node name="PickupAudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 8 )
+
+[connection signal="area_entered" from="HitBox" to="." method="_on_HitBox_area_entered"]
 [connection signal="timeout" from="DrowningTimer" to="." method="_on_DrowningTimer_timeout"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_DashTimer_timeout"]
 

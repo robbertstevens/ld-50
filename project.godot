@@ -129,7 +129,7 @@ ui_end={
 "deadzone": 0.5,
 "events": [  ]
 }
-ui_attack={
+ui_dash={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
@@ -146,6 +146,7 @@ ui_build={
 2d_physics/layer_2="Player"
 2d_physics/layer_3="Bomb"
 2d_physics/layer_4="Water"
+2d_physics/layer_5="Pickables"
 
 [physics]
 
