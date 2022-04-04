@@ -153,3 +153,7 @@ class TileMapBounds:
         bounds.limit_bottom = map_limits.end.y * map_cellsize.y
         
         return bounds
+
+
+func _on_Player_died() -> void:
+    print("player died")
