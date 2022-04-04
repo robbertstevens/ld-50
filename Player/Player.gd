@@ -13,6 +13,9 @@ onready var crosshair = $Crosshair
 onready var drowning_timer = $DrowningTimer
 onready var dash_timer = $DashTimer
 onready var animation_manager = $AnimatedSprite
+onready var dash_sound = $DashAudioStreamPlayer
+onready var drowning_sound = $DrowningAudioStreamPlayer
+
 
 enum States {
     Idle,
@@ -32,7 +35,7 @@ enum States {
 var velocity: Vector2 = Vector2.ZERO
 var direction: Vector2 = Vector2.ZERO
 var crosshair_origin: Vector2
-
+var rng = RandomNumberGenerator.new()
 
 func _ready() -> void:
     var state_fn = {
@@ -52,6 +55,8 @@ func _ready() -> void:
     state_manager.init(States, state_fn, States.Idle)
     crosshair_origin = crosshair.position
     crosshair.hide()
+    
+    rng.randomize()
 
 
 func _physics_process(delta: float) -> void:
@@ -89,6 +94,8 @@ func _dash_state(delta: float) -> int:
     if dash_timer.is_stopped():
         dash_timer.start()
         direction = get_direction()
+        dash_sound.pitch_scale = rng.randf_range(0.85, 1.15)
+        dash_sound.play()
     
     animation_manager.play("dash")
     
@@ -152,6 +159,9 @@ func _building_state(delta: float) -> int:
 func _drowning_state(delta: float) -> int:
     if drowning_timer.is_stopped():
         drowning_timer.start()
+        
+        drowning_sound.play()
+        
     
     animation_manager.play("drowning")
     

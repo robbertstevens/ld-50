@@ -15,7 +15,7 @@ animations = [ {
 "frames": [ SubResource( 2 ), SubResource( 3 ) ],
 "loop": true,
 "name": "default",
-"speed": 5.0
+"speed": 1.0
 } ]
 
 [node name="Zeus" type="Node2D"]

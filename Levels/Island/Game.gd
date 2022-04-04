@@ -1,6 +1,5 @@
 extends Level
 
-
 export (PackedScene) onready var Bomb
 export (PackedScene) onready var Corner
 export (PackedScene) onready var Smoke
@@ -10,6 +9,7 @@ onready var player = $Player
 onready var land = $TileMaps/Land
 onready var water = $TileMaps/Water
 onready var zeus = $Zeus
+onready var explosion_sound = $ExplosionAudioStreamPlayer
 
 var rng = RandomNumberGenerator.new()
 
@@ -31,11 +31,6 @@ func _ready() -> void:
     rng.randomize()
 
     var bounds = TileMapBounds.from_tile_map($TileMaps/Land)
-    
-    print(bounds.limit_top)
-    print(bounds.limit_left)
-    print(bounds.limit_right)
-    print(bounds.limit_bottom)
     
     camera.limit_left = bounds.limit_left
     camera.limit_right = bounds.limit_right
@@ -81,13 +76,15 @@ func _on_Bomb_explode(position) -> void:
             if not inside_circle(hit_cell, coord, radius):
                 continue
             
-            add_child(create_smoke(coord * tile_size + Vector2(4,4)))
+            create_smoke(coord * tile_size + Vector2(4,4))
             
             if land.get_cellv(coord) == LAND_TILE_ID:
 #                create_debug_block(coord * tile_size + Vector2(4,4))
                 land.set_cellv(coord, EMPTY_TILE_ID)
                 water.set_cellv(coord, WATER_TILE_ID)
     
+    explosion_sound.pitch_scale = rng.randf_range(0.85, 1.15)
+    explosion_sound.play()
     land.update_bitmask_region(top_left, bottom_right)
     water.update_bitmask_region(top_left, bottom_right)
 
@@ -97,11 +94,10 @@ func create_debug_block(position: Vector2) -> void:
     c_i.global_position = position
     add_child(c_i)
 
-func create_smoke(position: Vector2):
+func create_smoke(position: Vector2) -> void:
     var smoke_instance = Smoke.instance()
     smoke_instance.global_position = position
-    
-    return smoke_instance
+    add_child(smoke_instance)
 
 
 func create_bomb(position: Vector2, target: Vector2):
@@ -138,13 +134,12 @@ func _on_Player_land_build(position) -> void:
     for y in range(top_left.y, bottom_right.y):
         for x in range(top_left.x, bottom_right.x):
             var coord = Vector2(x, y)
-            
+
             if not inside_circle(tile, coord, build_radius):
                 continue
-            
-            if land.get_cellv(coord) == EMPTY_TILE_ID:
-                land.set_cellv(coord, LAND_TILE_ID)
-                water.set_cellv(coord, EMPTY_TILE_ID)
+
+            land.set_cellv(coord, LAND_TILE_ID)
+            water.set_cellv(coord, EMPTY_TILE_ID)
     
     land.update_bitmask_region(top_left, bottom_right)
     water.update_bitmask_region(top_left, bottom_right)
@@ -159,6 +154,8 @@ func _on_BombTimer_timeout() -> void:
         var bomb_instance = create_bomb(zeus.global_position, target * tile_size)
         
         add_child(bomb_instance)
+        
+        $BombTimer.wait_time = max(.5, $BombTimer.wait_time * 0.95)
     else:
         $BombTimer.stop()
 
@@ -187,4 +184,4 @@ func _on_Player_died() -> void:
 
 
 func _on_Player_dashed(position) -> void:
-    add_child(create_smoke(position))
+    create_smoke(position)
