@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://StateManager/StateManager.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player/Player.gd" type="Script" id=2]
@@ -34,6 +34,10 @@ region = Rect2( 60, 0, 12, 12 )
 atlas = ExtResource( 3 )
 region = Rect2( 72, 0, 12, 12 )
 
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 3 )
+region = Rect2( 84, 0, 12, 12 )
+
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
 "frames": [ SubResource( 4 ), SubResource( 5 ) ],
@@ -55,6 +59,11 @@ animations = [ {
 "loop": true,
 "name": "dead",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 12 ) ],
+"loop": true,
+"name": "dash",
+"speed": 5.0
 } ]
 
 [sub_resource type="CircleShape2D" id=1]
@@ -66,11 +75,11 @@ radius = 1.0
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
 script = ExtResource( 2 )
-speed = 150
+speed = 120
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 3 )
-animation = "idle"
+animation = "dash"
 
 [node name="StateManager" parent="." instance=ExtResource( 1 )]
 

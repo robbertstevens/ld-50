@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 signal bomb_thrown(position, target)
+signal dashed(position)
 signal land_build(position)
 signal died()
 
@@ -85,11 +86,16 @@ func _walking_state(_delta: float) -> int:
 
 
 func _dash_state(delta: float) -> int:
-    $CollisionShape2D.disabled = true
     if dash_timer.is_stopped():
         dash_timer.start()
         direction = get_direction()
     
+    animation_manager.play("dash")
+    
+    emit_signal("dashed", global_position)
+        
+    $CollisionShape2D.disabled = true
+        
     var normalized = direction.normalized()
    
     velocity = move_and_slide(normalized * 500)
@@ -191,7 +197,8 @@ func get_direction() -> Vector2:
     
     direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
     direction.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-    
+
+        
     return direction
 
 

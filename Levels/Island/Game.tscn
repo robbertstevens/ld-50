@@ -15,6 +15,7 @@ script = ExtResource( 6 )
 Bomb = ExtResource( 7 )
 Corner = ExtResource( 8 )
 Smoke = ExtResource( 9 )
+radius = 2.5
 
 [node name="TileMaps" type="Node2D" parent="."]
 script = ExtResource( 5 )
@@ -50,6 +51,7 @@ autostart = true
 position = Vector2( 101, 59 )
 
 [connection signal="bomb_thrown" from="Player" to="." method="_on_KinematicBody2D_bomb_thrown"]
+[connection signal="dashed" from="Player" to="." method="_on_Player_dashed"]
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
 [connection signal="land_build" from="Player" to="." method="_on_Player_land_build"]
 [connection signal="timeout" from="BombTimer" to="." method="_on_BombTimer_timeout"]

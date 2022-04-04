@@ -24,6 +24,8 @@ var center: Vector2
 var time_alive := 0.0
 
 export (float) var radius = 3
+export (float) var build_radius = 1
+
 
 func _ready() -> void:
     rng.randomize()
@@ -50,7 +52,7 @@ func _physics_process(delta: float) -> void:
     camera.global_position = lerp(camera.global_position, player.global_position, 0.2)
 
     # Move Zeus
-    zeus.global_position = rotate_around_point(zeus.global_position, center, 25 * delta)
+    zeus.global_position = utils.rotate_around_point(zeus.global_position, center, 25 * delta)
 
 
 func _on_KinematicBody2D_bomb_thrown(position, target) -> void:
@@ -120,26 +122,32 @@ func inside_circle(center: Vector2, tile: Vector2, radius: float) -> bool:
     return distance <= radius;
 
 
-func rotate_around_point(pos: Vector2, center: Vector2, angle: float) -> Vector2: 
-    var r = angle * (PI / 180)
-    
-    var x = cos(r) * (pos.x - center.x) - sin(r) * (pos.y-center.y) + center.x 
-    var y = sin(r) * (pos.x - center.x) + cos(r) * (pos.y-center.y) + center.y
-    
-    return Vector2(x, y)
-
-
 func _on_Player_land_build(position) -> void:
     # TODO: Should make the building more predictable
     
     var player_tile = land.world_to_map(player.global_position)
     var tile = land.world_to_map(position)
     var cell = land.get_cellv(tile)
+
+    if not cell == EMPTY_TILE_ID:
+        return
+        
+    var top_left = tile - Vector2.ONE * build_radius
+    var bottom_right = tile + Vector2.ONE * build_radius + Vector2.ONE 
     
-    if cell == EMPTY_TILE_ID:
-        land.set_cellv(tile, LAND_TILE_ID)
-        water.set_cellv(tile, EMPTY_TILE_ID)
-        land.update_bitmask_area(tile)
+    for y in range(top_left.y, bottom_right.y):
+        for x in range(top_left.x, bottom_right.x):
+            var coord = Vector2(x, y)
+            
+            if not inside_circle(tile, coord, build_radius):
+                continue
+            
+            if land.get_cellv(coord) == EMPTY_TILE_ID:
+                land.set_cellv(coord, LAND_TILE_ID)
+                water.set_cellv(coord, EMPTY_TILE_ID)
+    
+    land.update_bitmask_region(top_left, bottom_right)
+    water.update_bitmask_region(top_left, bottom_right)
 
 
 func _on_BombTimer_timeout() -> void:    
@@ -176,3 +184,7 @@ class TileMapBounds:
 
 func _on_Player_died() -> void:
     end_level({"alive_time": time_alive})
+
+
+func _on_Player_dashed(position) -> void:
+    add_child(create_smoke(position))
